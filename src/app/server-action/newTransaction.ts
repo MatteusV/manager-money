@@ -1,7 +1,7 @@
 'use server'
 
-import type { Transaction } from "@/components/financeControl";
-import { prisma } from "@/lib/prisma";
+import type { Transaction } from '@/components/financeControl'
+import { prisma } from '@/lib/prisma'
 
 interface NewTransactionProps extends Omit<Transaction, 'id'> {
   userId: string
@@ -10,11 +10,11 @@ interface NewTransactionProps extends Omit<Transaction, 'id'> {
 export async function newTransaction(data: NewTransactionProps) {
   const userExists = await prisma.user.findUnique({
     where: {
-      id: data.userId
-    }
+      id: data.userId,
+    },
   })
 
-  if(!userExists) {
+  if (!userExists) {
     return { error: 'Usuário não foi encontrado' }
   }
 
@@ -24,8 +24,8 @@ export async function newTransaction(data: NewTransactionProps) {
       description: data.description,
       type: data.type,
       date: data.date,
-      userId: data.userId
-    }
+      userId: data.userId,
+    },
   })
 
   return { transaction }

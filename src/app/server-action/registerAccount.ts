@@ -1,9 +1,9 @@
 'use server'
 
-import { prisma } from "@/lib/prisma"
-import { signJwt } from "@/utils/signJwt"
-import { hash } from "bcryptjs"
-import { cookies } from "next/headers"
+import { prisma } from '@/lib/prisma'
+import { signJwt } from '@/utils/signJwt'
+import { hash } from 'bcryptjs'
+import { cookies } from 'next/headers'
 
 interface RegisterAccountProps {
   email: string
@@ -14,12 +14,12 @@ interface RegisterAccountProps {
 export async function registerAccount(data: RegisterAccountProps) {
   const userAlreadyExists = await prisma.user.findUnique({
     where: {
-      email: data.email.toLocaleLowerCase()
-    }
+      email: data.email.toLocaleLowerCase(),
+    },
   })
 
-  if(userAlreadyExists) {
-    return {error: 'Email já foi utilizado'}
+  if (userAlreadyExists) {
+    return { error: 'Email já foi utilizado' }
   }
 
   const passwordHash = await hash(data.password, 6)
@@ -28,18 +28,18 @@ export async function registerAccount(data: RegisterAccountProps) {
     data: {
       email: data.email.toLocaleLowerCase(),
       password: passwordHash,
-      name: data.name
-    }
+      name: data.name,
+    },
   })
 
-  const { token } = await signJwt({email: user.email, id: user.id})
+  const { token } = await signJwt({ email: user.email, id: user.id })
 
   const cookiesStore = await cookies()
 
   cookiesStore.set('token', token, {
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7D
     httpOnly: true,
-    path: '/'
+    path: '/',
   })
 
   return { user, token }

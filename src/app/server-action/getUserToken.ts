@@ -19,7 +19,7 @@ export async function getUserToken() {
   try {
     const decoded = jose.decodeJwt(token) as TokenPayload
     return {
-      tokenDecoded: decoded
+      tokenDecoded: decoded,
     }
   } catch (error) {
     console.error('Erro ao decodificar token:', error)

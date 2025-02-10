@@ -9,25 +9,25 @@ interface TokenPayload {
   exp: number
 }
 export function useAuth() {
-  const [userId, setUserId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null)
 
   useEffect(() => {
-    const token = Cookies.get('token');
-    
+    const token = Cookies.get('token')
+
     if (token) {
       try {
-        const decoded = jose.decodeJwt(token) as TokenPayload;
-        setUserId(decoded.id);
+        const decoded = jose.decodeJwt(token) as TokenPayload
+        setUserId(decoded.id)
       } catch (error) {
-        console.error('Erro ao decodificar token:', error);
-        Cookies.remove('token'); 
-        setUserId(null);
+        console.error('Erro ao decodificar token:', error)
+        Cookies.remove('token')
+        setUserId(null)
       }
     }
-  }, []);
+  }, [])
 
   return {
     userId,
     isAuthenticated: !!userId,
-  };
+  }
 }
