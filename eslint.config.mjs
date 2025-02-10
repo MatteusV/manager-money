@@ -8,10 +8,9 @@ const eslintConfig = [
   ...compat.config({
     extends: [
       'next/core-web-vitals',
-      'next',
       '@rocketseat/eslint-config/react',
     ],
-    ignorePatterns: ['src/components/ui', 'src/hooks/user-toast.ts'],
+    ignorePatterns: ['src/components/ui', 'src/hooks/use-toast.ts'],
   }),
 ]
 
