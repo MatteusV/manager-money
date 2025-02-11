@@ -7,7 +7,7 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.config({
     extends: ['next/core-web-vitals', '@rocketseat/eslint-config/react'],
-    ignorePatterns: ['src/components/ui', 'src/hooks/use-toast.ts'],
+    ignorePatterns: ['src/components/ui/', 'src/hooks/use-toast.ts'],
   }),
 ]
 
