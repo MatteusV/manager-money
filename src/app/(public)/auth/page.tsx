@@ -39,7 +39,9 @@ export default function LoginPage() {
     if (error) {
       toast({
         title: error,
+        description: error,
       })
+      return setIsLoading(false)
     }
 
     if (user) {

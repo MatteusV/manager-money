@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
+  provider = "sqlite"
+  url      = env("SQLITE_URL")
 }
 
 model User {
@@ -19,6 +19,7 @@ model User {
   email       String        @unique
   password    String
   Transaction Transaction[]
+  Category    Category[]
 
   @@map("users")
 }
@@ -32,10 +33,24 @@ model Transaction {
   id          String          @id @default(uuid())
   description String
   amount      Float
+  category    Category        @relation(fields: [categoryId], references: [id])
   type        TransactionType
   date        DateTime        @default(now())
   userId      String
   user        User            @relation(fields: [userId], references: [id])
+  categoryId  String
 
   @@map("transactions")
+}
+
+model Category {
+  id     String          @id @default(uuid())
+  name   String
+  userId String
+  type   TransactionType
+
+  user        User          @relation(fields: [userId], references: [id])
+  Transaction Transaction[]
+
+  @@map("categories")
 }

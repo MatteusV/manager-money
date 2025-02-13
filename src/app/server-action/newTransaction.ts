@@ -1,13 +1,11 @@
 'use server'
 
-import type { Transaction } from '@/components/financeControl'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 
-interface NewTransactionProps extends Omit<Transaction, 'id'> {
-  userId: string
-}
-
-export async function newTransaction(data: NewTransactionProps) {
+export async function newTransaction(
+  data: Prisma.TransactionUncheckedCreateInput,
+) {
   const userExists = await prisma.user.findUnique({
     where: {
       id: data.userId,
@@ -25,6 +23,10 @@ export async function newTransaction(data: NewTransactionProps) {
       type: data.type,
       date: data.date,
       userId: data.userId,
+      categoryId: data.categoryId,
+    },
+    include: {
+      category: true,
     },
   })
 

@@ -7,6 +7,15 @@ export async function fetchTransaction({ userId }: { userId: string }) {
     where: {
       userId,
     },
+    include: {
+      category: {
+        select: {
+          id: true,
+          name: true,
+          type: true,
+        },
+      },
+    },
   })
 
   return { transactions }
