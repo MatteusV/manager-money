@@ -17,7 +17,7 @@ export default function PerformanceControlClient({
       <h1 className="text-2xl font-bold mb-6">Performance Financeira</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
+        <Card className="max-md:hidden">
           <CardHeader>
             <CardTitle>Fluxo de Caixa</CardTitle>
           </CardHeader>
@@ -25,7 +25,6 @@ export default function PerformanceControlClient({
             <CashFlowChart transactions={transactions} />
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader>
             <CardTitle>Despesas por Categoria</CardTitle>

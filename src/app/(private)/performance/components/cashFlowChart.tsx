@@ -19,7 +19,7 @@ import {
   endOfDay,
 } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import type { Transaction } from '../app/(private)/(home)/components/financeControl'
+import type { Transaction } from '@/@types/transactions-with-category'
 
 ChartJS.register(
   CategoryScale,
@@ -204,7 +204,7 @@ export const CashFlowChart: React.FC<CashFlowChartProps> = ({
   }
 
   return (
-    <div className="w-full h-max max-md:hidden">
+    <div className="w-full h-max">
       <Line data={chartData} options={options} />
     </div>
   )

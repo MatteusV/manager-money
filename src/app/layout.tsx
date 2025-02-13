@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
+import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
   title: 'Manager Money',
@@ -21,6 +22,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster theme="system" />
           {children}
         </ThemeProvider>
       </body>

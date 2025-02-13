@@ -1,5 +1,11 @@
+'use client'
+
+import type { Transaction } from '@/@types/transactions-with-category'
+import { deleteTransaction } from '@/app/server-action/deleteTransaction'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Transaction } from '../app/(private)/(home)/components/financeControl'
+import { Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 interface TransactionsListProps {
   transactionsByMonth: Record<
@@ -13,6 +19,7 @@ export function TransactionsList({
   transactionsByMonth,
   currentMonth,
 }: TransactionsListProps) {
+  const router = useRouter()
   return (
     <Card>
       <CardHeader>
@@ -44,7 +51,19 @@ export function TransactionsList({
                       key={transaction.id}
                       className="py-2 flex justify-between"
                     >
-                      <span>{transaction.description}</span>
+                      <div className="space-x-2">
+                        <Button
+                          onClick={async () => {
+                            await deleteTransaction({ id: transaction.id })
+                            router.refresh()
+                          }}
+                          variant={'link'}
+                          className="hover:text-red-600"
+                        >
+                          <Trash2 className="size-5" />
+                        </Button>
+                        <span>{transaction.description}</span>
+                      </div>
                       <span
                         className={
                           transaction.type === 'INCOME'

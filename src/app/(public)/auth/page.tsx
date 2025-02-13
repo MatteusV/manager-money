@@ -16,7 +16,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { authenticate } from '@/app/server-action/authenticate'
-import { toast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 
 type FormData = {
   email: string
@@ -37,18 +37,12 @@ export default function LoginPage() {
     const { error, user } = await authenticate(data)
 
     if (error) {
-      toast({
-        title: error,
-        description: error,
-      })
+      toast.error(error)
       return setIsLoading(false)
     }
 
     if (user) {
-      toast({
-        title: 'Login feito com sucesso!',
-      })
-
+      toast.success('Login feito com sucesso!')
       router.push('/')
     }
     setIsLoading(false)

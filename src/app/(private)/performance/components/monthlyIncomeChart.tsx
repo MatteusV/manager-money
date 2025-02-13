@@ -28,8 +28,9 @@ type MonthlyIncomeChartProps = {
 export const MonthlyIncomeChart: React.FC<MonthlyIncomeChartProps> = ({
   transactions,
 }) => {
-  const calculateMonthlyIncome = () => {
-    const monthlyIncome: { [key: string]: number } = {}
+  const calculateMonthlyData = () => {
+    const monthlyData: { [key: string]: { income: number; expense: number } } =
+      {}
 
     const dates = transactions.map((t) => t.date)
     const minDate = new Date(Math.min(...dates.map((d) => d.getTime())))
@@ -40,24 +41,27 @@ export const MonthlyIncomeChart: React.FC<MonthlyIncomeChartProps> = ({
       end: endOfMonth(maxDate),
     }).forEach((date) => {
       const monthKey = format(date, 'yyyy-MM')
-      monthlyIncome[monthKey] = 0
+      monthlyData[monthKey] = { income: 0, expense: 0 }
     })
 
-    transactions
-      .filter((t) => t.type === 'INCOME')
-      .forEach((transaction) => {
-        const date = transaction.date
-        const monthKey = format(date, 'yyyy-MM')
-        monthlyIncome[monthKey] =
-          (monthlyIncome[monthKey] || 0) + transaction.amount
-      })
+    transactions.forEach((transaction) => {
+      const date = transaction.date
+      const monthKey = format(date, 'yyyy-MM')
 
-    return monthlyIncome
+      if (transaction.type === 'INCOME') {
+        monthlyData[monthKey].income += transaction.amount
+      } else {
+        monthlyData[monthKey].expense += transaction.amount
+      }
+    })
+
+    return monthlyData
   }
 
-  const monthlyIncome = calculateMonthlyIncome()
-  const labels = Object.keys(monthlyIncome).sort()
-  const data = labels.map((label) => monthlyIncome[label])
+  const monthlyData = calculateMonthlyData()
+  const labels = Object.keys(monthlyData).sort()
+  const incomes = labels.map((label) => monthlyData[label].income)
+  const expenses = labels.map((label) => monthlyData[label].expense)
 
   const chartData = {
     labels: labels.map((label) =>
@@ -66,9 +70,16 @@ export const MonthlyIncomeChart: React.FC<MonthlyIncomeChartProps> = ({
     datasets: [
       {
         label: 'Receita Mensal',
-        data,
+        data: incomes,
         backgroundColor: 'rgba(75, 192, 192, 0.6)',
         borderColor: 'rgb(75, 192, 192)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Gastos Mensais',
+        data: expenses,
+        backgroundColor: 'rgba(239, 68, 68, 0.6)',
+        borderColor: 'rgb(239, 68, 68)',
         borderWidth: 1,
       },
     ],
@@ -82,7 +93,7 @@ export const MonthlyIncomeChart: React.FC<MonthlyIncomeChartProps> = ({
       },
       title: {
         display: true,
-        text: 'Receita Mensal',
+        text: 'Receita e Gastos Mensais',
       },
     },
     scales: {

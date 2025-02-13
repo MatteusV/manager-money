@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { getUserToken } from '../../server-action/getUserToken'
 import { redirect } from 'next/navigation'
-import { SettingsControlClient } from './settingsControlClient'
+import { SettingsControlClient } from './components/settingsControlClient'
 import { fetchCategory } from '@/app/server-action/fetchCategory'
 
 export default async function SettingsPage() {

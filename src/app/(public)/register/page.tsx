@@ -16,7 +16,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { registerAccount } from '@/app/server-action/registerAccount'
-import { toast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 
 type FormData = {
   name: string
@@ -38,17 +38,13 @@ export default function RegisterPage() {
     const { error, user } = await registerAccount(data)
 
     if (error) {
-      toast({
-        title: 'Erro ao criar a sua conta.',
+      toast.error('Erro ao criar a sua conta.', {
         description: error,
       })
     }
 
     if (user) {
-      toast({
-        title: 'Conta criada com sucesso.',
-      })
-
+      toast('Conta criada com sucesso.')
       router.push('/')
     }
     setIsLoading(false)

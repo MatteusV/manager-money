@@ -5,9 +5,9 @@ import type { Category, Prisma } from '@prisma/client'
 import { TransactionForm } from './transactionForm'
 import { CurrentBalance } from './currentBalance'
 import { newTransaction } from '@/app/server-action/newTransaction'
-import { toast } from '@/hooks/use-toast'
 import { TransactionsList } from './transactionList'
 import type { Transaction } from '@/@types/transactions-with-category'
+import { toast } from 'sonner'
 
 interface FinanceControlClientProps {
   initialTransactions: Transaction[]
@@ -71,8 +71,7 @@ export function FinanceControlClient({
         await newTransaction(transaction)
 
       if (error) {
-        return toast({
-          title: 'Erro ao criar uma nova transação!',
+        return toast.error('Erro ao criar uma nova transação!', {
           description: error,
         })
       }
