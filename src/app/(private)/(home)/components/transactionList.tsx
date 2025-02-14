@@ -6,6 +6,13 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import Dayjs from 'dayjs'
 
 interface TransactionsListProps {
   transactionsByMonth: Record<
@@ -62,7 +69,18 @@ export function TransactionsList({
                         >
                           <Trash2 className="size-5" />
                         </Button>
-                        <span>{transaction.description}</span>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              {transaction.description}
+                            </TooltipTrigger>
+                            <TooltipContent className="bg-background text-foreground p-2 border border-foreground rounded-xl">
+                              <p>
+                                {Dayjs(transaction.date).format('DD/MM/YYYY')}
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       </div>
                       <span
                         className={

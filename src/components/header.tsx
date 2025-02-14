@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ThemeToggle } from './theme-toggle'
 import { ChartColumn, Home, Settings } from 'lucide-react'
+import { ProfileButton } from './profileButton'
 
 export function Header() {
   return (
@@ -28,7 +29,10 @@ export function Header() {
           <Settings className="size-5" />
         </Link>
       </div>
-      <ThemeToggle />
+      <div className="space-x-2">
+        <ThemeToggle />
+        <ProfileButton />
+      </div>
     </header>
   )
 }
