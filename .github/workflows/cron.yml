@@ -1,0 +1,13 @@
+name: Weekly Notification Job
+
+on:
+  schedule:
+    - cron: '0 9 * * 1' 
+
+jobs:
+  send-notifications:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Notification API
+        run: |
+          curl -X GET https://seu-dominio.com/api/send-notifications

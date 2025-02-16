@@ -14,12 +14,15 @@ datasource db {
 }
 
 model User {
-  id          String        @id @default(uuid())
-  name        String
-  email       String        @unique
-  password    String
-  Transaction Transaction[]
-  Category    Category[]
+  id               String             @id @default(uuid())
+  name             String
+  email            String             @unique
+  password         String
+  imageUrl         String?
+  imagePath        String?
+  Transaction      Transaction[]
+  Category         Category[]
+  PushSubscription PushSubscription[]
 
   @@map("users")
 }
@@ -53,4 +56,17 @@ model Category {
   Transaction Transaction[]
 
   @@map("categories")
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@map("push_subscriptions")
 }

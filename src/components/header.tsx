@@ -2,8 +2,12 @@ import Link from 'next/link'
 import { ThemeToggle } from './theme-toggle'
 import { ChartColumn, Home, Settings } from 'lucide-react'
 import { ProfileButton } from './profileButton'
+import { getUserToken } from '@/app/server-action/getUserToken'
+import { getImageProfile } from '@/app/server-action/getImageProfile'
 
-export function Header() {
+export async function Header() {
+  const { tokenDecoded } = await getUserToken()
+  const { imageUrl } = await getImageProfile(tokenDecoded!.id!)
   return (
     <header className="w-full p-4 flex items-center justify-between border-b border-zinc-500/50">
       <div className="flex-1 flex gap-4">
@@ -29,9 +33,9 @@ export function Header() {
           <Settings className="size-5" />
         </Link>
       </div>
-      <div className="space-x-2">
+      <div className="flex items-center gap-4">
         <ThemeToggle />
-        <ProfileButton />
+        <ProfileButton imageUrl={imageUrl} />
       </div>
     </header>
   )

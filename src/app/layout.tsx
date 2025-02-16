@@ -3,6 +3,8 @@ import './globals.css'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
 import { Analytics } from '@vercel/analytics/react'
+import { NotificationSetup } from '@/components/notificationSetup'
+import { RegisterServiceWorker } from '@/components/registerServiceWorker'
 
 export const metadata: Metadata = {
   title: 'Manager Money',
@@ -24,6 +26,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Analytics />
+          <RegisterServiceWorker />
+          <NotificationSetup />
           <Toaster theme="system" />
           {children}
         </ThemeProvider>
