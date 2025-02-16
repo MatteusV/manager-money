@@ -73,8 +73,6 @@ async function getWeeklySpending(): Promise<number> {
     },
   })
 
-  console.log(transactions)
-
   const totalSpending = transactions.reduce(
     (sum, transaction) => sum + transaction.amount,
     0,
