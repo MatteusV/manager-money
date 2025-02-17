@@ -5,9 +5,9 @@ import { getUserToken } from './getUserToken'
 import { getStartAndEndOfWeek } from '@/utils/getStartAndEndOfWeek'
 
 webPush.setVapidDetails(
-  'mailto:varlesse04@gmail.com', // Corrigido para "mailto:"
+  'mailto:varlesse04@gmail.com',
   process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.NEXT_PUBLIC_VAPID_PRIVATE_KEY!,
+  process.env.VAPID_PRIVATE_KEY!,
 )
 
 export async function sendWeeklyNotifications() {
