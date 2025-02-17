@@ -10,4 +10,4 @@ jobs:
     steps:
       - name: Call Notification API
         run: |
-          curl -X GET https://seu-dominio.com/api/send-notifications
+          curl -X GET https://manager-money-bice.vercel.app/api/send-notifications
