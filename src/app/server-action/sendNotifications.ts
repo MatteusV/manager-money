@@ -27,7 +27,6 @@ export async function sendWeeklyNotifications() {
       const payload = JSON.stringify({
         title: 'Resumo Semanal de Gastos',
         body: `Você gastou R$${weeklySpending} esta semana.`,
-        icon: '/icon.png',
       })
 
       try {

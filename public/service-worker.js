@@ -7,7 +7,7 @@ self.addEventListener('push', (event) => {
   } catch {
     console.warn('Payload inválido recebido:', event.data?.text())
     data = {
-      title: 'Notificação',
+      title: 'Manager Money',
       body: 'Você recebeu uma nova notificação!',
       icon: '/icon.png',
     }
