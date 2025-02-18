@@ -47,6 +47,11 @@ export const ExpensesByCategoryChart: React.FC<
     ],
   }
 
+  const totalExpenses = Object.values(expensesByCategory).reduce(
+    (acc, value) => acc + value,
+    0,
+  )
+
   const options = {
     responsive: true,
     plugins: {
@@ -56,6 +61,17 @@ export const ExpensesByCategoryChart: React.FC<
       title: {
         display: true,
         text: 'Despesas por Categoria',
+      },
+      tooltip: {
+        callbacks: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          label: (context: any) => {
+            const label = context.label || ''
+            const value = context.raw as number
+            const percentage = ((value / totalExpenses) * 100).toFixed(2) + '%'
+            return `${label}: R$ ${value.toFixed(2)} (${percentage})`
+          },
+        },
       },
     },
   }

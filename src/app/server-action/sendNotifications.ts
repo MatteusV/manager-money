@@ -5,7 +5,7 @@ import { getUserToken } from './getUserToken'
 import { getStartAndEndOfWeek } from '@/utils/getStartAndEndOfWeek'
 
 webPush.setVapidDetails(
-  'mailto:varlesse04@gmail.com',
+  'https://manager-money-bice.vercel.app',
   process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
   process.env.VAPID_PRIVATE_KEY!,
 )
