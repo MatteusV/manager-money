@@ -26,7 +26,7 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close()
   event.waitUntil(
     clients.matchAll({ type: 'window' }).then((clientList) => {
-      const urlToOpen = '/'
+      const urlToOpen = '/performance'
 
       for (const client of clientList) {
         if (client.url === urlToOpen && 'focus' in client) {

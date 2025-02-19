@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { Category, Prisma } from '@prisma/client'
+import type { Category, Goal, Prisma } from '@prisma/client'
 import { TransactionForm } from './transactionForm'
 import { CurrentBalance } from './currentBalance'
 import { newTransaction } from '@/app/server-action/newTransaction'
@@ -13,18 +13,21 @@ interface FinanceControlClientProps {
   initialTransactions: Transaction[]
   userId: string
   initialCategories: Category[]
+  initialGoals: Goal[]
 }
 
 export function FinanceControlClient({
   initialTransactions,
   userId,
   initialCategories,
+  initialGoals,
 }: FinanceControlClientProps) {
   const [transactions, setTransactions] =
     useState<Transaction[]>(initialTransactions)
   const [description, setDescription] = useState('')
   const [amount, setAmount] = useState('')
   const [categoryId, setCategoryId] = useState('')
+  const [goalId, setGoalId] = useState('')
 
   const currentMonth = new Intl.DateTimeFormat('pt-BR', {
     month: 'long',
@@ -65,6 +68,7 @@ export function FinanceControlClient({
         type: type === 'income' ? 'INCOME' : 'EXPENSE',
         categoryId,
         userId,
+        goalId: goalId || null,
       }
 
       const { transaction: transactionDb, error } =
@@ -85,6 +89,7 @@ export function FinanceControlClient({
   }
 
   const categories = initialCategories.map((c) => ({ id: c.id, name: c.name }))
+  const goals = initialGoals.map((g) => ({ id: g.id, name: g.name }))
   return (
     <div className="container mx-auto p-4 min-h-screen bg-background text-foreground">
       <div className="flex justify-between items-center mb-4">
@@ -92,6 +97,8 @@ export function FinanceControlClient({
       </div>
 
       <TransactionForm
+        goals={goals}
+        onGoalChange={setGoalId}
         description={description}
         amount={amount}
         categories={categories}

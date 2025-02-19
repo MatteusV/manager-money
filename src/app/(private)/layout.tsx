@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Header } from '@/components/header'
-import { api } from '@/lib/fetch'
 
 export const metadata: Metadata = {
   title: 'Manager Money',
@@ -12,7 +11,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  api('/api/init-cron', {
+  fetch(`${process.env.NEXT_PUBLIC_URL}/api/init-cron`, {
     next: {
       tags: ['init-cron'],
       revalidate: 60 * 60 * 1, // 1 hour

@@ -24,9 +24,11 @@ export async function newTransaction(
       date: data.date,
       userId: data.userId,
       categoryId: data.categoryId,
+      goalId: data.goalId,
     },
     include: {
       category: true,
+      Goal: true,
     },
   })
 

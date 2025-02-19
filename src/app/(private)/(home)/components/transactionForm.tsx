@@ -14,9 +14,11 @@ interface TransactionFormProps {
   description: string
   amount: string
   categories: { name: string; id: string }[]
+  goals: { name: string; id: string }[]
   onDescriptionChange: (value: string) => void
   onAmountChange: (value: string) => void
   onCategoryChange: (value: string) => void
+  onGoalChange: (value: string) => void
   onAddTransaction: (type: 'income' | 'expense') => void
 }
 
@@ -28,6 +30,8 @@ export function TransactionForm({
   onAmountChange,
   onCategoryChange,
   onAddTransaction,
+  goals,
+  onGoalChange,
 }: TransactionFormProps) {
   return (
     <Card className="mb-6">
@@ -48,9 +52,9 @@ export function TransactionForm({
             onChange={(e) => onAmountChange(e.target.value)}
           />
         </div>
-        <div className="mb-4 mt-4">
+        <div className="flex justify-between max-md:flex-col gap-2 mb-4 mt-4">
           <Select onValueChange={onCategoryChange}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full flex-1">
               <SelectValue placeholder="Selecione uma categoria" />
             </SelectTrigger>
             <SelectContent>
@@ -61,6 +65,21 @@ export function TransactionForm({
               ))}
             </SelectContent>
           </Select>
+
+          {goals.length > 0 && (
+            <Select onValueChange={onGoalChange}>
+              <SelectTrigger className="w-full flex-1">
+                <SelectValue placeholder="Selecione a meta" />
+              </SelectTrigger>
+              <SelectContent>
+                {goals.map((goal) => (
+                  <SelectItem key={goal.id} value={goal.id}>
+                    {goal.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         </div>
         <div className="flex space-x-2">
           <Button onClick={() => onAddTransaction('income')} className="flex-1">
