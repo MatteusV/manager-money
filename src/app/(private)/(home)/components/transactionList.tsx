@@ -44,7 +44,7 @@ export function TransactionsList({
         <CardTitle>Transações</CardTitle>
       </CardHeader>
       <CardContent className="px-1">
-        <ul className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto h-96 px-5">
+        <ul className="divide-y divide-gray-200 overflow-y-auto dark:divide-gray-700 h-96 px-5">
           {Object.entries(transactionsByMonth).map(
             ([month, { transactions, balance }]) => (
               <div key={month} className="mb-4">
@@ -67,7 +67,7 @@ export function TransactionsList({
                   .map((transaction) => (
                     <li
                       key={transaction.id}
-                      className="py-2 flex justify-between"
+                      className="py-2 flex justify-between overflow-y-auto"
                     >
                       <div className="space-x-2">
                         <Button

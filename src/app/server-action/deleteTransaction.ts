@@ -11,7 +11,7 @@ export async function deleteTransaction({ id }: { id: string }) {
         },
       }),
       prisma.$accelerate.invalidate({
-        tags: ['transactions'],
+        tags: ['transactions', 'goals'],
       }),
     ])
   } catch (error) {

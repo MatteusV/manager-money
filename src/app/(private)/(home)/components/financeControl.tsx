@@ -33,28 +33,32 @@ export function FinanceControlClient({
     year: 'numeric',
   }).format(new Date())
 
-  const transactionsByMonth = transactions.reduce(
-    (acc, transaction) => {
-      const month = new Intl.DateTimeFormat('pt-BR', {
-        month: 'long',
-        year: 'numeric',
-      }).format(new Date(transaction.date))
+  const transactionsByMonth = transactions
+    .filter((t) => t.categoryId)
+    .reduce(
+      (acc, transaction) => {
+        const month = new Intl.DateTimeFormat('pt-BR', {
+          month: 'long',
+          year: 'numeric',
+        }).format(new Date(transaction.date))
 
-      if (!acc[month]) {
-        acc[month] = {
-          transactions: [],
-          balance: 0,
+        if (!acc[month]) {
+          acc[month] = {
+            transactions: [],
+            balance: 0,
+          }
         }
-      }
 
-      acc[month].transactions.push(transaction)
-      acc[month].balance +=
-        transaction.type === 'INCOME' ? transaction.amount : -transaction.amount
+        acc[month].transactions.push(transaction)
+        acc[month].balance +=
+          transaction.type === 'INCOME'
+            ? transaction.amount
+            : -transaction.amount
 
-      return acc
-    },
-    {} as Record<string, { transactions: Transaction[]; balance: number }>,
-  )
+        return acc
+      },
+      {} as Record<string, { transactions: Transaction[]; balance: number }>,
+    )
 
   const currentBalance = transactionsByMonth[currentMonth]?.balance || 0
 
