@@ -4,7 +4,7 @@ import { FinanceControlClient } from '@/app/(private)/(home)/components/financeC
 import { getUserToken } from '../../server-action/getUserToken'
 import { redirect } from 'next/navigation'
 import { fetchCategory } from '@/app/server-action/fetchCategory'
-import { Fallback } from './components/fallback'
+import { Fallback } from '../../../components/fallback'
 import { fetchGoals } from '@/app/server-action/fetchGoals'
 
 export default async function Page() {
@@ -14,9 +14,17 @@ export default async function Page() {
     redirect('/auth')
   }
 
-  const { transactions } = await fetchTransaction({ userId: tokenDecoded.id })
-  const { categories } = await fetchCategory({ userId: tokenDecoded.id })
-  const { goals } = await fetchGoals({ userId: tokenDecoded.id })
+  const [transactionsResult, categoriesResult, goalsResult] = await Promise.all(
+    [
+      fetchTransaction({ userId: tokenDecoded.id }),
+      fetchCategory({ userId: tokenDecoded.id }),
+      fetchGoals({ userId: tokenDecoded.id }),
+    ],
+  )
+
+  const { transactions } = transactionsResult
+  const { categories } = categoriesResult
+  const { goals } = goalsResult
 
   return (
     <Suspense fallback={<Fallback />}>

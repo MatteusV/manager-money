@@ -3,9 +3,20 @@
 import { prisma } from '@/lib/prisma'
 
 export async function deleteTransaction({ id }: { id: string }) {
-  await prisma.transaction.delete({
-    where: {
-      id,
-    },
-  })
+  try {
+    await Promise.all([
+      prisma.transaction.delete({
+        where: {
+          id,
+        },
+      }),
+      prisma.$accelerate.invalidate({
+        tags: ['transactions'],
+      }),
+    ])
+  } catch (error) {
+    if (error) {
+      return { error }
+    }
+  }
 }

@@ -26,7 +26,8 @@ export function CardGoals({ goals, userId }: CardGoalsProps) {
 
   async function addNewGoal() {
     if (!nameGoal || !valueGoal) {
-      return toast.error('Preencha os campos corretamente.')
+      toast.error('Preencha os campos corretamente.')
+      return
     }
 
     const { error } = await createNewGoal({
@@ -38,7 +39,8 @@ export function CardGoals({ goals, userId }: CardGoalsProps) {
     })
 
     if (error) {
-      return toast.error(error)
+      toast.error(error)
+      return
     }
 
     router.refresh()

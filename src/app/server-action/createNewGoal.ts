@@ -18,6 +18,10 @@ export async function createNewGoal({ data }: CreateNewGoalProps) {
     }
   }
 
+  prisma.$accelerate.invalidate({
+    tags: ['goals'],
+  })
+
   return {
     goal,
   }

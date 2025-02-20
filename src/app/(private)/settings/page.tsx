@@ -3,7 +3,7 @@ import { getUserToken } from '../../server-action/getUserToken'
 import { redirect } from 'next/navigation'
 import { SettingsControlClient } from './components/settingsControlClient'
 import { fetchCategory } from '@/app/server-action/fetchCategory'
-import { Fallback } from '../(home)/components/fallback'
+import { Fallback } from '../../../components/fallback'
 import { fetchGoals } from '@/app/server-action/fetchGoals'
 
 export default async function SettingsPage() {

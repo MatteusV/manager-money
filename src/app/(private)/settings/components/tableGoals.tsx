@@ -32,36 +32,51 @@ export function TableGoals({
         <TableRow>
           <TableHead>Nome</TableHead>
           <TableHead>Meta</TableHead>
+          <TableHead>Valor acomulado</TableHead>
+          <TableHead>Progresso</TableHead>
           <TableHead>Ações</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody className="overflow-y-auto">
-        {goals.map((goal) => (
-          <TableRow key={goal.id}>
-            <TableCell>{goal.name}</TableCell>
-            <TableCell>
-              {new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              }).format(goal.targetAmount)}
-            </TableCell>
+        {goals.map((goal) => {
+          const progress = (goal.savedAmount / goal.targetAmount) * 100
 
-            <TableCell>
-              <DialogUpdateGoal
-                goal={goal}
-                updateGoal={updateGoal}
-                key={goal.id}
-              />
+          return (
+            <TableRow key={goal.id}>
+              <TableCell>{goal.name}</TableCell>
+              <TableCell>
+                {new Intl.NumberFormat('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).format(goal.targetAmount)}
+              </TableCell>
+              <TableCell>
+                {new Intl.NumberFormat('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).format(goal.savedAmount)}
+              </TableCell>
+              <TableCell>{progress}%</TableCell>
 
-              <DialogDeleteGoal
-                goalId={goal.id}
-                handleDeleteGoal={deleteGoal}
-              />
-            </TableCell>
-          </TableRow>
-        ))}
+              <TableCell>
+                <DialogUpdateGoal
+                  goal={goal}
+                  updateGoal={updateGoal}
+                  key={goal.id}
+                />
+
+                <DialogDeleteGoal
+                  goalId={goal.id}
+                  handleDeleteGoal={deleteGoal}
+                />
+              </TableCell>
+            </TableRow>
+          )
+        })}
       </TableBody>
     </Table>
   )

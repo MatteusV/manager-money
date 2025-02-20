@@ -1,12 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import type { Category, Goal, Prisma } from '@prisma/client'
+import type { Category, Goal, Prisma, Transaction } from '@prisma/client'
 import { TransactionForm } from './transactionForm'
 import { CurrentBalance } from './currentBalance'
 import { newTransaction } from '@/app/server-action/newTransaction'
 import { TransactionsList } from './transactionList'
-import type { Transaction } from '@/@types/transactions-with-category'
 import { toast } from 'sonner'
 
 interface FinanceControlClientProps {
@@ -68,20 +67,35 @@ export function FinanceControlClient({
         type: type === 'income' ? 'INCOME' : 'EXPENSE',
         categoryId,
         userId,
-        goalId: goalId || null,
+        goalId,
+      }
+
+      if (!transaction.categoryId && !transaction.goalId) {
+        toast.error('Selecione uma categoria ou uma meta!')
+        return
+      }
+
+      if (transaction.categoryId && transaction.goalId) {
+        toast.error('Selecione apenas uma categoria ou uma meta!')
+        return
       }
 
       const { transaction: transactionDb, error } =
         await newTransaction(transaction)
 
       if (error) {
-        return toast.error('Erro ao criar uma nova transação!', {
+        toast.error('Erro ao criar uma nova transação!', {
           description: error,
         })
+        return
       }
-
       if (transactionDb) {
-        setTransactions([...transactions, transactionDb])
+        setTransactions([
+          ...transactions,
+          {
+            ...transactionDb,
+          },
+        ])
         setDescription('')
         setAmount('')
       }
@@ -97,8 +111,8 @@ export function FinanceControlClient({
       </div>
 
       <TransactionForm
-        goals={goals}
         onGoalChange={setGoalId}
+        goals={goals}
         description={description}
         amount={amount}
         categories={categories}
@@ -109,7 +123,6 @@ export function FinanceControlClient({
       />
 
       <CurrentBalance balance={currentBalance} />
-
       <TransactionsList
         transactionsByMonth={transactionsByMonth}
         currentMonth={currentMonth}

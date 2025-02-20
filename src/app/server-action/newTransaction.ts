@@ -23,13 +23,17 @@ export async function newTransaction(
       type: data.type,
       date: data.date,
       userId: data.userId,
-      categoryId: data.categoryId,
-      goalId: data.goalId,
+      categoryId: data.categoryId ? data.categoryId : null,
+      goalId: data.goalId ? data.goalId : null,
     },
     include: {
       category: true,
-      Goal: true,
+      goal: !!data.goalId,
     },
+  })
+
+  prisma.$accelerate.invalidate({
+    tags: ['transactions'],
   })
 
   return { transaction }

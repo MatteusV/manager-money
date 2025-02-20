@@ -92,7 +92,7 @@ export function DialogDeleteCategory({
                     transferTo: selectedTransferCategory!,
                   })
                 } else {
-                  return toast.error('Erro ao deletar a categoria!', {
+                  toast.error('Erro ao deletar a categoria!', {
                     description:
                       'Você precisa transferir as transações que estão nessa categoria.',
                   })

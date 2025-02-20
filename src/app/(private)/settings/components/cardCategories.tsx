@@ -41,7 +41,8 @@ export function CardCategories({ categories, userId }: CardCategoriesProps) {
       }
       const { category } = await createNewCategory({ data })
       if (!category) {
-        return toast.error('Erro ao criar uma nova categoría.')
+        toast.error('Erro ao criar uma nova categoría.')
+        return
       }
     }
 

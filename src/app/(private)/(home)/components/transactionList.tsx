@@ -1,6 +1,5 @@
 'use client'
 
-import type { Transaction } from '@/@types/transactions-with-category'
 import { deleteTransaction } from '@/app/server-action/deleteTransaction'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -13,6 +12,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import Dayjs from 'dayjs'
+import type { Transaction } from '@prisma/client'
+import { toast } from 'sonner'
 
 interface TransactionsListProps {
   transactionsByMonth: Record<
@@ -27,6 +28,16 @@ export function TransactionsList({
   currentMonth,
 }: TransactionsListProps) {
   const router = useRouter()
+
+  async function handleDeleteTransaction(transactionId: string) {
+    const result = await deleteTransaction({ id: transactionId })
+    if (result && result.error) {
+      toast.error('Erro ao deletar a transação')
+    } else {
+      router.refresh()
+    }
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -60,10 +71,9 @@ export function TransactionsList({
                     >
                       <div className="space-x-2">
                         <Button
-                          onClick={async () => {
-                            await deleteTransaction({ id: transaction.id })
-                            router.refresh()
-                          }}
+                          onClick={() =>
+                            handleDeleteTransaction(transaction.id)
+                          }
                           variant={'link'}
                           className="hover:text-red-600"
                         >

@@ -7,14 +7,9 @@ export async function fetchTransaction({ userId }: { userId: string }) {
     where: {
       userId,
     },
-    include: {
-      category: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-        },
-      },
+    cacheStrategy: {
+      tags: ['transactions'],
+      ttl: 60 * 60 * 60 * 1, // 1 hour
     },
   })
 

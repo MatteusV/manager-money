@@ -7,5 +7,5 @@ interface Category {
 }
 
 export interface Transaction extends TransactionPrisma {
-  category: Category
+  category: Category | null
 }
