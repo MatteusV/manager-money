@@ -62,29 +62,42 @@ export const CashFlowChart: React.FC<CashFlowChartProps> = ({
     )
 
     const allDays = eachDayOfInterval({ start: minDate, end: maxDate })
+
+    // Inicializa receitas e despesas diárias como 0
     allDays.forEach((date) => {
       const dateKey = format(date, 'yyyy-MM-dd')
-      dailyBalances[dateKey] = runningBalance
       dailyIncomes[dateKey] = 0
       dailyExpenses[dateKey] = 0
     })
 
+    // Ordena as transações por data
     transactions.sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     )
-    transactions.forEach((transaction) => {
-      const dateKey = format(transaction.date, 'yyyy-MM-dd')
-      const amount = transaction.amount
 
-      if (transaction.type === 'INCOME') {
-        runningBalance += amount
-        dailyIncomes[dateKey] += amount
-      } else {
-        runningBalance -= amount
-        dailyExpenses[dateKey] -= amount // ✅ Agora mantém o valor negativo corretamente
-      }
+    // Processa as transações e atualiza receitas, despesas e saldo
+    allDays.forEach((date) => {
+      const dateKey = format(date, 'yyyy-MM-dd')
 
-      dailyBalances[dateKey] = runningBalance
+      const transactionsForDate = transactions.filter(
+        (transaction) => format(transaction.date, 'yyyy-MM-dd') === dateKey,
+      )
+
+      transactionsForDate.forEach((transaction) => {
+        const amount = transaction.amount
+
+        if (transaction.type === 'INCOME') {
+          runningBalance += amount
+          dailyIncomes[dateKey] += amount
+        }
+
+        if (transaction.type === 'EXPENSE') {
+          runningBalance -= amount
+          dailyExpenses[dateKey] += amount
+        }
+      })
+
+      dailyBalances[dateKey] = runningBalance // Atualiza saldo após processar todas as transações do dia
     })
 
     const labels = Object.keys(dailyBalances).sort()
@@ -92,12 +105,7 @@ export const CashFlowChart: React.FC<CashFlowChartProps> = ({
     const incomes = labels.map((label) => dailyIncomes[label])
     const expenses = labels.map((label) => dailyExpenses[label])
 
-    return {
-      labels,
-      balances,
-      incomes,
-      expenses,
-    }
+    return { labels, balances, incomes, expenses }
   }
 
   const { labels, balances, incomes, expenses } = calculateDailyBalances()
@@ -161,7 +169,7 @@ export const CashFlowChart: React.FC<CashFlowChartProps> = ({
               label += new Intl.NumberFormat('pt-BR', {
                 style: 'currency',
                 currency: 'BRL',
-              }).format(Math.abs(context.parsed.y))
+              }).format(context.parsed.y)
             }
             return label
           },
