@@ -9,7 +9,7 @@ export async function fetchGoals({ userId }: { userId: string }) {
     },
     cacheStrategy: {
       tags: ['goals'],
-      ttl: 60 * 60 * 5, // 5 minutes
+      ttl: 60 * 60 * 60 * 1, // 1 hour
     },
   })
 
