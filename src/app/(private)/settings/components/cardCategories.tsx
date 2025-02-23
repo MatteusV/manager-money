@@ -30,6 +30,9 @@ export function CardCategories({ categories, userId }: CardCategoriesProps) {
   const [newCategoryName, setNewCategoryName] = useState<string | null>(null)
   const [newCategoryType, setNewCategoryType] =
     useState<$Enums.TransactionType | null>(null)
+  const [newCategoryBudget, setNewCategoryBudget] = useState<number | null>(
+    null,
+  )
 
   const router = useRouter()
 
@@ -54,13 +57,14 @@ export function CardCategories({ categories, userId }: CardCategoriesProps) {
     data,
   }: {
     categoryId: string
-    data: { name?: string; type?: $Enums.TransactionType }
+    data: { name?: string; type?: $Enums.TransactionType; budget?: number }
   }) {
     updateCategory({
       categoryId,
       data: {
         name: data.name,
         type: data.type === 'INCOME' ? 'INCOME' : 'EXPENSE',
+        budget: data.budget,
       },
     })
     router.refresh()
@@ -110,6 +114,8 @@ export function CardCategories({ categories, userId }: CardCategoriesProps) {
         </div>
 
         <TableCategories
+          setNewCategoryBudget={setNewCategoryBudget}
+          newCategoryBudget={newCategoryBudget}
           setNewCategoryName={setNewCategoryName}
           setNewCategoryType={setNewCategoryType}
           handleDeleteCategory={handleDeleteCategory}

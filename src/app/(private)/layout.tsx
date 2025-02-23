@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Header } from '@/components/header'
+import { PushNotificationManager } from '@/components/notificationSetup'
 
 export const metadata: Metadata = {
   title: 'Manager Money',
@@ -23,6 +24,7 @@ export default async function RootLayout({
 
   return (
     <div className="antialiased text-base">
+      <PushNotificationManager />
       <Header />
       {children}
     </div>

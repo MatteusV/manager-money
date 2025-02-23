@@ -11,9 +11,6 @@ export async function createNewCategory({ data }: CreateNewCategory) {
   const category = await prisma.category.create({
     data,
   })
-  prisma.$accelerate.invalidate({
-    tags: ['categories'],
-  })
 
   return { category }
 }

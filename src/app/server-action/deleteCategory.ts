@@ -19,15 +19,9 @@ export async function deleteCategory({ id, tranferTo }: DeleteCategoryProps) {
     })
   }
 
-  await Promise.all([
-    prisma.category.delete({
-      where: {
-        id,
-      },
-    }),
-
-    prisma.$accelerate.invalidate({
-      tags: ['categories'],
-    }),
-  ])
+  await prisma.category.delete({
+    where: {
+      id,
+    },
+  })
 }

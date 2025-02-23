@@ -7,10 +7,6 @@ export async function fetchGoals({ userId }: { userId: string }) {
     where: {
       userId,
     },
-    cacheStrategy: {
-      tags: ['goals'],
-      ttl: 60 * 60 * 60 * 1, // 1 hour
-    },
   })
 
   return { goals: goals || [] }

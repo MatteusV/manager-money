@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/send-weekly-alerts/route.ts": {
+      "schedule": "0 8 * * 1"
+    }
+  }
+}

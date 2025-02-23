@@ -19,9 +19,11 @@ interface TableCategoriesProps {
   newCategoryName: string | null
   newCategoryType: $Enums.TransactionType | null
   setNewCategoryName: (value: string) => void
+  setNewCategoryBudget: (value: number) => void
+  newCategoryBudget: number | null
   handleUpdateCategory: (value: {
     categoryId: string
-    data: { name?: string; type?: $Enums.TransactionType }
+    data: { name?: string; type?: $Enums.TransactionType; budget?: number }
   }) => void
   setNewCategoryType: (value: $Enums.TransactionType) => void
   handleDeleteCategory: (data: {
@@ -37,6 +39,8 @@ export function TableCategories({
   newCategoryType,
   setNewCategoryName,
   setNewCategoryType,
+  newCategoryBudget,
+  setNewCategoryBudget,
 }: TableCategoriesProps) {
   const [selectedCategoryToDelete, setSelectedCategoryToDelete] = useState<
     string | null
@@ -50,6 +54,7 @@ export function TableCategories({
         <TableRow>
           <TableHead>Nome</TableHead>
           <TableHead>Tipo</TableHead>
+          <TableHead>Budget</TableHead>
           <TableHead>Ações</TableHead>
         </TableRow>
       </TableHeader>
@@ -60,8 +65,11 @@ export function TableCategories({
             <TableCell>
               {category.type === 'INCOME' ? 'Receita' : 'Despesa'}
             </TableCell>
+            <TableCell>{category.budget}</TableCell>
             <TableCell>
               <DialogUpdateCategory
+                newCategoryBudget={newCategoryBudget}
+                setNewCategoryBudget={setNewCategoryBudget}
                 category={category}
                 handleUpdateCategory={handleUpdateCategory}
                 newCategoryName={newCategoryName}

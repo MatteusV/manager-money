@@ -23,10 +23,6 @@ export async function fetchTransactionsWithCategory({
         },
       },
     },
-    cacheStrategy: {
-      tags: ['transactionsWithCategory'],
-      ttl: 60 * 60 * 60 * 1, // 1 hour
-    },
   })
 
   return { transactions }

@@ -34,10 +34,6 @@ export async function newTransaction(
 
   if (data.goalId) {
     await updateGoalSavedAmount(data.goalId, data.amount, data.type)
-  } else {
-    prisma.$accelerate.invalidate({
-      tags: ['transactions'],
-    })
   }
 
   return { transaction }
@@ -51,13 +47,8 @@ async function updateGoalSavedAmount(
   const operation =
     type === 'INCOME' ? { increment: amount } : { decrement: amount }
 
-  await Promise.all([
-    prisma.goal.update({
-      where: { id: goalId },
-      data: { savedAmount: operation },
-    }),
-    prisma.$accelerate.invalidate({
-      tags: ['goals', 'transactions'],
-    }),
-  ])
+  await prisma.goal.update({
+    where: { id: goalId },
+    data: { savedAmount: operation },
+  })
 }

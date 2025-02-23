@@ -16,9 +16,7 @@ export async function deleteGoal({ id }: { id: string }) {
         },
       }),
     ])
-    await prisma.$accelerate.invalidate({
-      tags: ['goals'],
-    })
+
     return { success: true }
   } catch (error) {
     console.log('Erro ao deletar a meta', error)

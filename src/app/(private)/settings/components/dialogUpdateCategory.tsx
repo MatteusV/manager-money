@@ -17,11 +17,13 @@ interface DialogUpdateCategoryProps {
   category: Category
   setNewCategoryName: (value: string) => void
   setNewCategoryType: (value: $Enums.TransactionType) => void
+  setNewCategoryBudget: (value: number) => void
   handleUpdateCategory: (value: {
     categoryId: string
-    data: { name?: string; type?: $Enums.TransactionType }
+    data: { name?: string; type?: $Enums.TransactionType; budget?: number }
   }) => void
   newCategoryName: string | null
+  newCategoryBudget: number | null
   newCategoryType: $Enums.TransactionType | null
 }
 
@@ -32,6 +34,8 @@ export function DialogUpdateCategory({
   setNewCategoryType,
   newCategoryName,
   newCategoryType,
+  setNewCategoryBudget,
+  newCategoryBudget,
 }: DialogUpdateCategoryProps) {
   return (
     <Dialog>
@@ -53,6 +57,18 @@ export function DialogUpdateCategory({
               id="name"
               defaultValue={category.name}
               onChange={(e) => setNewCategoryName(e.target.value)}
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="type" className="text-right">
+              Budget
+            </Label>
+            <Input
+              id="budget"
+              type="number"
+              defaultValue={category.budget}
+              onChange={(e) => setNewCategoryBudget(Number(e.target.value))}
               className="col-span-3"
             />
           </div>
@@ -83,6 +99,7 @@ export function DialogUpdateCategory({
                 data: {
                   name: newCategoryName ?? undefined,
                   type: newCategoryType ?? undefined,
+                  budget: newCategoryBudget ?? undefined,
                 },
               })
             }

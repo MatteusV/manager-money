@@ -11,10 +11,6 @@ export async function fetchCategory({ userId }: FetchCategoryProps) {
     where: {
       userId,
     },
-    cacheStrategy: {
-      tags: ['categories'],
-      ttl: 60 * 60 * 60 * 1, // 1 hour
-    },
   })
 
   return { categories }
