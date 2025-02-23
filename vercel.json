@@ -1,7 +1,8 @@
 {
-  "functions": {
-    "api/send-weekly-alerts/route.ts": {
+  "crons": [
+    {
+      "path": "/api/send-weekly-alerts",
       "schedule": "0 8 * * 1"
     }
-  }
+  ]
 }
