@@ -12,16 +12,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  fetch(`${process.env.NEXT_PUBLIC_URL}/api/init-cron`, {
-    next: {
-      tags: ['init-cron'],
-      revalidate: 60 * 60 * 1, // 1 hour
-    },
-    cache: 'force-cache',
-  }).catch((error) => {
-    console.error('Erro ao iniciar cron job:', error)
-  })
-
   return (
     <div className="antialiased text-base">
       <PushNotificationManager />

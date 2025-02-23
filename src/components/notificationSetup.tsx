@@ -7,6 +7,7 @@ export function PushNotificationManager() {
   const [registration, setRegistration] =
     useState<ServiceWorkerRegistration | null>(null)
   const [isSubscribed, setIsSubscribed] = useState(false)
+  const [showModal, setShowModal] = useState(true)
 
   useEffect(() => {
     if ('serviceWorker' in navigator && 'PushManager' in window) {
@@ -15,6 +16,14 @@ export function PushNotificationManager() {
         .then((reg) => {
           console.log('Service Worker registrado:', reg)
           setRegistration(reg)
+
+          reg.pushManager.getSubscription().then((sub) => {
+            if (sub) {
+              console.log('Usuário já inscrito:', sub)
+              setIsSubscribed(true)
+              setShowModal(false)
+            }
+          })
         })
         .catch((err) =>
           console.error('Falha ao registrar o Service Worker:', err),
@@ -41,8 +50,9 @@ export function PushNotificationManager() {
           body: JSON.stringify(subscription),
         })
         setIsSubscribed(true)
+        setShowModal(false)
         toast('Inscrição realizada!', {
-          description: 'Você receberá notificações do sistema.',
+          description: 'Você receberá notificações push.',
         })
       } catch (err) {
         console.error('Falha na inscrição:', err)
@@ -50,6 +60,9 @@ export function PushNotificationManager() {
           description: 'Não foi possível inscrever para notificações.',
         })
       }
+    } else {
+      // Se o usuário negar a permissão, ocultamos o modal
+      setShowModal(false)
     }
   }
 
@@ -66,20 +79,24 @@ export function PushNotificationManager() {
     return outputArray
   }
 
-  useEffect(() => {
-    if (!isSubscribed && registration) {
-      toast('Ativar Notificações', {
-        description: 'Clique para ativar notificações push',
-        duration: Infinity,
-        closeButton: true,
-        action: {
-          label: 'Ativar',
-          onClick: () => handleSubscribe(),
-        },
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSubscribed, registration])
+  if (showModal && !isSubscribed && registration) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full text-center">
+          <h2 className="text-2xl font-semibold mb-4">Ativar Notificações</h2>
+          <p className="mb-6">
+            Para ficar por dentro das atualizações, ative as notificações push.
+          </p>
+          <button
+            onClick={handleSubscribe}
+            className="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          >
+            Ativar
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return null
 }
