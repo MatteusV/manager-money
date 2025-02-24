@@ -17,6 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
+      <head>
+        <meta name="apple-mobile-web-app-title" content="Manager Money" />
+      </head>
       <body className="antialiased text-base">
         <ThemeProvider
           attribute="class"

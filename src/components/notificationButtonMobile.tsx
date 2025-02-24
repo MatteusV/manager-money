@@ -1,14 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { toast } from 'sonner'
+import { Bell } from 'lucide-react'
+import { Button } from './ui/button'
 import {
-  registerServiceWorker,
   getPushSubscription,
+  registerServiceWorker,
   subscribeUser,
 } from '@/utils/pushNotifications'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
-export function PushNotificationManager() {
+export function NotificationButtonMobile() {
   const [registration, setRegistration] =
     useState<ServiceWorkerRegistration | null>(null)
   const [isSubscribed, setIsSubscribed] = useState(false)
@@ -50,24 +52,18 @@ export function PushNotificationManager() {
     }
   }
 
-  useEffect(() => {
-    if (
-      !isSubscribed &&
-      registration &&
-      Notification.permission !== 'granted'
-    ) {
-      toast('Ativar Notificações', {
-        description: 'Clique para ativar notificações push',
-        duration: Infinity,
-        action: {
-          label: 'Ativar',
-          onClick: () => handleSubscribe(),
-        },
-        position: 'top-right',
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSubscribed, registration])
+  if (registration && isSubscribed && Notification.permission === 'granted') {
+    return null
+  }
 
-  return null
+  return (
+    <Button
+      onClick={handleSubscribe}
+      variant="outline"
+      size={'icon'}
+      className="md:hidden"
+    >
+      <Bell className="size-5" />
+    </Button>
+  )
 }

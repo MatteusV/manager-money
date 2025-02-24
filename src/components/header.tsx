@@ -5,9 +5,12 @@ import { ProfileButton } from './profileButton'
 import { getUserToken } from '@/app/server-action/getUserToken'
 import { getImageProfile } from '@/app/server-action/getImageProfile'
 
+import { NotificationButtonMobile } from './notificationButtonMobile'
+
 export async function Header() {
   const { tokenDecoded } = await getUserToken()
   const { imageUrl } = await getImageProfile(tokenDecoded!.id!)
+
   return (
     <header className="w-full p-4 flex items-center justify-between border-b border-zinc-500/50">
       <div className="flex-1 flex gap-4">
@@ -34,6 +37,7 @@ export async function Header() {
         </Link>
       </div>
       <div className="flex items-center gap-4">
+        <NotificationButtonMobile />
         <ThemeToggle />
         <ProfileButton imageUrl={imageUrl} />
       </div>
