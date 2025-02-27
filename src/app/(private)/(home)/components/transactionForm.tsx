@@ -53,18 +53,20 @@ export function TransactionForm({
           />
         </div>
         <div className="flex justify-between max-md:flex-col gap-2 mb-4 mt-4">
-          <Select onValueChange={onCategoryChange}>
-            <SelectTrigger className="w-full flex-1">
-              <SelectValue placeholder="Selecione uma categoria" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((cat) => (
-                <SelectItem key={cat.id} value={cat.id}>
-                  {cat.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {categories.length > 0 && (
+            <Select onValueChange={onCategoryChange}>
+              <SelectTrigger className="w-full flex-1">
+                <SelectValue placeholder="Selecione uma categoria" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
 
           {goals.length > 0 && (
             <Select onValueChange={onGoalChange}>

@@ -68,17 +68,20 @@ export function CardGoals({ goals, userId }: CardGoalsProps) {
         <CardTitle>Gerenciar Metas</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-4 mb-4">
-          <Input
-            onChange={(e) => setNameGoal(e.target.value)}
-            placeholder="Nome da meta"
-          />
-          <Input
-            onChange={(e) => setValueGoal(Number(e.target.value))}
-            type="number"
-            placeholder="Valor da meta"
-            className="w-max"
-          />
+        <div className="flex max-md:flex-col gap-4 mb-4">
+          <div className="flex md:flex-1 gap-4">
+            <Input
+              onChange={(e) => setNameGoal(e.target.value)}
+              placeholder="Nome da meta"
+              className="max-md:flex-1"
+            />
+            <Input
+              onChange={(e) => setValueGoal(Number(e.target.value))}
+              type="number"
+              placeholder="Valor da meta"
+              className="max-md:flex-1"
+            />
+          </div>
 
           <Button onClick={addNewGoal}>
             <Plus className="mr-2 h-4 w-4" /> Adicionar

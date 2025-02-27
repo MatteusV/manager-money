@@ -87,27 +87,29 @@ export function CardCategories({ categories, userId }: CardCategoriesProps) {
         <CardTitle>Gerenciar Categorias</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex space-x-2 mb-4">
-          <Input
-            placeholder="Nova categoria"
-            value={newCategory.name}
-            onChange={(e) =>
-              setNewCategory({ ...newCategory, name: e.target.value })
-            }
-          />
-          <select
-            className="border rounded px-2 py-1"
-            defaultValue={newCategory.type}
-            onChange={(e) =>
-              setNewCategory({
-                ...newCategory,
-                type: e.target.value === 'income' ? 'INCOME' : 'EXPENSE',
-              })
-            }
-          >
-            <option value="expense">Despesa</option>
-            <option value="income">Receita</option>
-          </select>
+        <div className="flex md:justify-between max-md:flex-col gap-4 mb-4">
+          <div className="md:flex-1 flex gap-4">
+            <Input
+              placeholder="Nova categoria"
+              value={newCategory.name}
+              onChange={(e) =>
+                setNewCategory({ ...newCategory, name: e.target.value })
+              }
+            />
+            <select
+              className="border rounded px-2 py-1"
+              defaultValue={newCategory.type}
+              onChange={(e) =>
+                setNewCategory({
+                  ...newCategory,
+                  type: e.target.value === 'income' ? 'INCOME' : 'EXPENSE',
+                })
+              }
+            >
+              <option value="expense">Despesa</option>
+              <option value="income">Receita</option>
+            </select>
+          </div>
           <Button onClick={addCategory}>
             <Plus className="mr-2 h-4 w-4" /> Adicionar
           </Button>
