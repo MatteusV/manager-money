@@ -2,6 +2,11 @@ import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
 import webpush from 'web-push'
 import type { Alert } from '@/@types/alert'
+import type { PushSubscription, User } from '@prisma/client'
+
+interface UserWithPushSubscription extends User {
+  PushSubscription: PushSubscription[]
+}
 
 webpush.setVapidDetails(
   'mailto:seu-email@exemplo.com',
@@ -13,53 +18,37 @@ async function getUserData(userId: string) {
   const transactions = await prisma.transaction.findMany({
     where: {
       userId,
-      categoryId: {
-        not: null,
-      },
+      categoryId: { not: null },
     },
-    include: {
-      category: true,
-    },
+    include: { category: true },
   })
 
-  const spentByCategory = transactions.reduce(
-    (acc, t) => {
-      const categoryName = t.category!.name
-      acc[categoryName] = (acc[categoryName] || 0) + t.amount
-      return acc
-    },
-    {} as Record<string, number>,
-  )
+  const spentByCategory: Record<string, number> = {}
+  const categoryBudgets: Record<string, number> = {}
 
-  const categoryBudgets = transactions.reduce(
-    (acc, t) => {
-      const categoryName = t.category!.name
-      if (!acc[categoryName]) {
-        acc[categoryName] = t.category!.budget
-      }
-      return acc
-    },
-    {} as Record<string, number>,
-  )
+  for (const t of transactions) {
+    const categoryName = t.category!.name
+    spentByCategory[categoryName] =
+      (spentByCategory[categoryName] || 0) + t.amount
+    if (!categoryBudgets[categoryName]) {
+      categoryBudgets[categoryName] = t.category!.budget
+    }
+  }
 
-  return { transactions, spentByCategory, categoryBudgets }
+  return { spentByCategory, categoryBudgets }
 }
 
 function generateNotificationPayload(alerts: Alert[]): string {
-  const title = 'Resumo Semanal de Alertas Financeiros'
-  const body = alerts
-    .map((alert) => `${alert.category}: ${alert.message}`)
-    .join('\n')
-  return JSON.stringify({ title, body })
+  return JSON.stringify({
+    title: 'Resumo Semanal de Alertas Financeiros',
+    body: alerts
+      .map((alert) => `${alert.category}: ${alert.message}`)
+      .join('\n'),
+  })
 }
 
-export async function GET() {
-  const users = await prisma.user.findMany({
-    include: {
-      PushSubscription: true,
-    },
-  })
-  for (const user of users) {
+async function processUserNotifications(user: UserWithPushSubscription) {
+  try {
     const { spentByCategory, categoryBudgets } = await getUserData(user.id)
     const alerts: Alert[] = []
 
@@ -67,42 +56,59 @@ export async function GET() {
       const totalSpent = spentByCategory[category]
       const budgetLimit = categoryBudgets[category]
 
-      if (budgetLimit > 0) {
-        const percentage = (totalSpent / budgetLimit) * 100
-
-        if (percentage >= 80) {
-          alerts.push({
-            category,
-            message: `Você atingiu ${percentage.toFixed(0)}% do orçamento para ${category}.`,
-            recommendation: `Considere reduzir os gastos em ${category} ou rever seu orçamento.`,
-          })
-        }
+      if (budgetLimit > 0 && (totalSpent / budgetLimit) * 100 >= 80) {
+        alerts.push({
+          category,
+          message: `Você atingiu ${((totalSpent / budgetLimit) * 100).toFixed(0)}% do orçamento para ${category}.`,
+          recommendation: `Considere reduzir os gastos em ${category} ou rever seu orçamento.`,
+        })
       }
     }
 
     if (alerts.length > 0 && user.PushSubscription.length > 0) {
       const payload = generateNotificationPayload(alerts)
-      for (const subscription of user.PushSubscription) {
-        const pushSubscription = {
-          endpoint: subscription.endpoint,
-          keys: {
-            p256dh: subscription.p256dh,
-            auth: subscription.auth,
-          },
-        }
-        try {
-          await webpush.sendNotification(pushSubscription, payload)
-        } catch (error) {
-          console.error(
-            `Erro ao enviar push notification para ${user.email}:`,
-            error,
-          )
-        }
-      }
-    }
-  }
 
-  return NextResponse.json({
-    message: 'Notificações semanais enviadas com sucesso',
-  })
+      await Promise.all(
+        user.PushSubscription.map(async (subscription: PushSubscription) => {
+          try {
+            await webpush.sendNotification(
+              {
+                endpoint: subscription.endpoint,
+                keys: { p256dh: subscription.p256dh, auth: subscription.auth },
+              },
+              payload,
+            )
+          } catch (error) {
+            console.error(
+              `Erro ao enviar push notification para ${user.email}:`,
+              error,
+            )
+          }
+        }),
+      )
+    }
+  } catch (error) {
+    console.error(`Erro ao processar notificações para ${user.email}:`, error)
+  }
+}
+
+export async function GET() {
+  try {
+    const users = await prisma.user.findMany({
+      include: { PushSubscription: true },
+    })
+
+    // Executa todas as notificações em paralelo
+    await Promise.all(users.map((user) => processUserNotifications(user)))
+
+    return NextResponse.json({
+      message: 'Notificações semanais enviadas com sucesso',
+    })
+  } catch (error) {
+    console.error('Erro ao processar notificações:', error)
+    return NextResponse.json(
+      { message: 'Erro ao processar notificações' },
+      { status: 500 },
+    )
+  }
 }
