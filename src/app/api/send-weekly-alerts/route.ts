@@ -59,7 +59,6 @@ export async function GET() {
       PushSubscription: true,
     },
   })
-
   for (const user of users) {
     const { spentByCategory, categoryBudgets } = await getUserData(user.id)
     const alerts: Alert[] = []
