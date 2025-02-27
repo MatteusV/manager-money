@@ -2,14 +2,12 @@ import Link from 'next/link'
 import { ThemeToggle } from './theme-toggle'
 import { ChartColumn, Home, Settings } from 'lucide-react'
 import { ProfileButton } from './profileButton'
-import { getUserToken } from '@/app/server-action/getUserToken'
 import { getImageProfile } from '@/app/server-action/getImageProfile'
 
 import { NotificationButtonMobile } from './notificationButtonMobile'
 
 export async function Header() {
-  const { tokenDecoded } = await getUserToken()
-  const { imageUrl } = await getImageProfile(tokenDecoded!.id!)
+  const { imageUrl } = await getImageProfile()
 
   return (
     <header className="w-full p-4 flex items-center justify-between border-b border-zinc-500/50">
