@@ -55,11 +55,6 @@ function generateNotificationPayload(alerts: Alert[]): string {
 
 export async function GET() {
   const users = await prisma.user.findMany({
-    where: {
-      PushSubscription: {
-        some: {},
-      },
-    },
     include: {
       PushSubscription: true,
     },
