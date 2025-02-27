@@ -12,7 +12,6 @@ export async function updateCategory({
   categoryId,
   data,
 }: UpdateCategoryProps) {
-  console.log({ data })
   await prisma.category.update({
     where: {
       id: categoryId,
@@ -23,4 +22,6 @@ export async function updateCategory({
       budget: data.budget,
     },
   })
+
+  await prisma.$disconnect()
 }

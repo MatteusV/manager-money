@@ -42,5 +42,7 @@ export async function savePushSubscription({
       message: 'Failed to save subscription',
       errorDetails: (error as Error).message,
     }
+  } finally {
+    await prisma.$disconnect()
   }
 }

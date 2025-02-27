@@ -20,4 +20,6 @@ export async function updateGoal({ data }: UpdateGoalProps) {
       targetAmount: data.targetAmount,
     },
   })
+
+  await prisma.$disconnect()
 }

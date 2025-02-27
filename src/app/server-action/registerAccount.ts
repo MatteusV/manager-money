@@ -14,7 +14,7 @@ interface RegisterAccountProps {
 export async function registerAccount(data: RegisterAccountProps) {
   const userAlreadyExists = await prisma.user.findUnique({
     where: {
-      email: data.email.toLocaleLowerCase(),
+      email: data.email.toLowerCase(),
     },
   })
 
@@ -42,5 +42,6 @@ export async function registerAccount(data: RegisterAccountProps) {
     path: '/',
   })
 
+  await prisma.$disconnect()
   return { user, token }
 }

@@ -36,6 +36,7 @@ export async function newTransaction(
     await updateGoalSavedAmount(data.goalId, data.amount, data.type)
   }
 
+  await prisma.$disconnect()
   return { transaction }
 }
 
@@ -51,4 +52,6 @@ async function updateGoalSavedAmount(
     where: { id: goalId },
     data: { savedAmount: operation },
   })
+
+  await prisma.$disconnect()
 }

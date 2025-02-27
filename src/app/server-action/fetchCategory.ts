@@ -13,5 +13,7 @@ export async function fetchCategory({ userId }: FetchCategoryProps) {
     },
   })
 
+  await prisma.$disconnect()
+
   return { categories }
 }

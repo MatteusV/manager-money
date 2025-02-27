@@ -12,5 +12,7 @@ export async function createNewCategory({ data }: CreateNewCategory) {
     data,
   })
 
+  await prisma.$disconnect()
+
   return { category }
 }

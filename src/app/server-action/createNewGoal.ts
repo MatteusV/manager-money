@@ -17,6 +17,7 @@ export async function createNewGoal({ data }: CreateNewGoalProps) {
       error: 'Failed to create goal',
     }
   }
+  await prisma.$disconnect()
 
   return {
     goal,

@@ -63,5 +63,7 @@ export async function uploadProfileImage(data: FormData) {
   } catch (error) {
     console.error('Erro ao enviar a imagem:', error)
     throw new Error('Erro ao enviar a imagem para o servidor')
+  } finally {
+    await prisma.$disconnect()
   }
 }

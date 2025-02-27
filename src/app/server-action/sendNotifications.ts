@@ -50,6 +50,8 @@ export async function sendWeeklyNotifications() {
   } catch (error) {
     console.error('Erro ao enviar notificações:', error)
     return { success: false, message: 'Falha ao enviar notificações' }
+  } finally {
+    await prisma.$disconnect()
   }
 }
 

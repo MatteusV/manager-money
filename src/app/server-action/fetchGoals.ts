@@ -8,6 +8,7 @@ export async function fetchGoals({ userId }: { userId: string }) {
       userId,
     },
   })
+  await prisma.$disconnect()
 
   return { goals: goals || [] }
 }

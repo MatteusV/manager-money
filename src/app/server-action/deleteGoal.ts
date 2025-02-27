@@ -23,5 +23,7 @@ export async function deleteGoal({ id }: { id: string }) {
     if (error) {
       return { error }
     }
+  } finally {
+    await prisma.$disconnect()
   }
 }

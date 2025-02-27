@@ -41,5 +41,6 @@ export async function authenticate(data: AuthenticateProps) {
     path: '/',
   })
 
+  await prisma.$disconnect()
   return { user }
 }

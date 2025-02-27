@@ -8,6 +8,7 @@ export async function fetchTransaction({ userId }: { userId: string }) {
       userId,
     },
   })
+  await prisma.$disconnect()
 
   return { transactions }
 }

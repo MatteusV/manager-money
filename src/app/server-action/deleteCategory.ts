@@ -24,4 +24,6 @@ export async function deleteCategory({ id, tranferTo }: DeleteCategoryProps) {
       id,
     },
   })
+
+  await prisma.$disconnect()
 }
